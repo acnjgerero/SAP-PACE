@@ -8,12 +8,19 @@
   },
   "devDependencies": {
     "@cap-js/sqlite": "^2.4",
-    "@sap/cds-dk": "^9"
+    "@sap/cds-dk": "^9",
+    "cds-plugin-ui5": "^0.17.0",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.49"
   },
   "scripts": {
     "start": "cds-serve",
     "deploy:local": "cds deploy --to sqlite:db.sqlite",
-    "deploy:cf": "mbt build && cf deploy mta_archives/SAP_PACE_1.0.0.mtar --retries=0"
+    "deploy:cf": "mbt build && cf deploy mta_archives/SAP_PACE_1.0.0.mtar --retries=0",
+    "watch-service-catalog": "cds watch --open servicecatalog/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy SAP_PACE --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
   },
   "private": true,
   "cds": {
@@ -21,7 +28,9 @@
       "db": {
         "[development]": {
           "kind": "sqlite",
-          "credentials": { "url": "db.sqlite" }
+          "credentials": {
+            "url": "db.sqlite"
+          }
         },
         "[production]": {
           "kind": "hana",
@@ -32,5 +41,8 @@
         "auth": "xsuaa"
       }
     }
-  }
+  },
+  "workspaces": [
+    "app/*"
+  ]
 }

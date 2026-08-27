@@ -1,0 +1,42 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog id="serviceDialog" contentWidth="38rem"> 
+        <f:SimpleForm layout="ColumnLayout" columnsM="1" editable="true" id="SD">
+
+            <Label text="Service Name" required="true" id="LBL"/>
+            <Input value="{name}" placeholder="Input Service Name" id="inp"/>
+
+            <Label text="Plan Coverage" required="true" id="lbl"/>
+            <Input value="{plan}" placeholder="Input Plan Coverage" id="iplan"/>
+
+            <Label text="Technical Features Inclusion" id="ltf"/>
+            <TextArea value="{techFeature}" rows="4" width="100%"
+                placeholder="Write Technical Features here..." id="ttfeat"/>
+
+            <Label text="Cost by Metrics" id="lcm"/>
+            <Input value="{costByMetrics}" placeholder="Input Cost by Metrics" id="icbm"/>
+
+            <Label text="SAP Indicative Monthly Cost" id="lmnth"/>
+            <Input type="Number" placeholder="Input cost" id="inumb"
+                value="{ path: 'imc', type: 'sap.ui.model.odata.type.Decimal', constraints: { scale: 2 } }"/>
+            <Select selectedKey="{currency_code}" items="{/Currencies}" width="6rem" id="scc">
+                <core:Item key="{code}" text="{symbol}" id="cicode"/>
+            </Select>
+
+            <Label text="Status" id="ls"/>
+            <Select selectedKey="{ path: 'status', type: 'sap.ui.model.odata.type.Boolean' }" id="sselc">
+                <core:Item key="true" text="Active" id="cit"/>
+                <core:Item key="false" text="Inactive" id="cif"/>
+            </Select>
+
+        </f:SimpleForm>
+        <beginButton>
+            <Button text="Add" type="Emphasized" press=".onDialogSave" id="btnS"/>   <!-- press changed -->
+        </beginButton>
+        <endButton>
+            <Button text="Cancel" press=".onDialogCancel" id="btnC"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
