@@ -1,0 +1,36 @@
+{
+  "name": "SAP_PACE",
+  "version": "1.0.0",
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9",
+    "@sap/xssec": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2.4",
+    "@sap/cds-dk": "^9"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "deploy:local": "cds deploy --to sqlite:db.sqlite",
+    "deploy:cf": "mbt build && cf deploy mta_archives/SAP_PACE_1.0.0.mtar --retries=0"
+  },
+  "private": true,
+  "cds": {
+    "requires": {
+      "db": {
+        "[development]": {
+          "kind": "sqlite",
+          "credentials": { "url": "db.sqlite" }
+        },
+        "[production]": {
+          "kind": "hana",
+          "deploy-format": "hdbtable"
+        }
+      },
+      "[production]": {
+        "auth": "xsuaa"
+      }
+    }
+  }
+}

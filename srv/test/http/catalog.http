@@ -1,0 +1,77 @@
+### PACE – Service Catalog HTTP tests
+# Run `cds watch` first, then send requests (VS Code "REST Client" or JetBrains HTTP client).
+# Dev auth is mocked and the service is unrestricted, so no Authorization header is needed.
+
+@host = http://localhost:4004
+@catalog = {{host}}/odata/v4/catalog
+
+# Captured from the "create service" response and reused below.
+@serviceId = a3f1c2d4-0b5e-4a9c-8d21-1f6e7a0b9c11
+
+### Service document / metadata
+GET {{catalog}}/
+
+### Metadata (EDMX)
+GET {{catalog}}/$metadata
+
+### List services – top 20, newest first
+GET {{catalog}}/Services?$top=20&$orderby=createdAt desc
+
+### List services – catalog list-report shape (columns shown in the UI)
+GET {{catalog}}/Services?$select=name,plan,techFeature,costByMetrics,imc,currency_code,status&$orderby=name
+
+### Filter – only Active services
+GET {{catalog}}/Services?$filter=status eq true
+
+### Filter – free-text search on name + tech features
+GET {{catalog}}/Services?$filter=contains(name,'AI') or contains(techFeature,'AI')
+
+### Count
+GET {{catalog}}/Services/$count
+
+### Create a service
+# @name createService
+POST {{catalog}}/Services
+Content-Type: application/json
+
+{
+  "name": "SAP HANA Cloud",
+  "plan": "Standard Ed",
+  "techFeature": "2 vCPU / 30 GB memory, 120 GB storage",
+  "costByMetrics": "Capacity Unit (CU)",
+  "imc": 1.75,
+  "currency_code": "USD",
+  "status": true
+}
+
+### Read the service just created
+GET {{catalog}}/Services({{serviceId}})
+
+### Read a single field
+GET {{catalog}}/Services({{serviceId}})/imc
+
+### Update (PATCH) – deactivate + reprice
+PATCH {{catalog}}/Services({{serviceId}})
+Content-Type: application/json
+
+{
+  "imc": 2.10,
+  "status": false
+}
+
+### Expand currency code list
+GET {{catalog}}/Services({{serviceId}})?$expand=currency
+
+### Delete
+DELETE {{catalog}}/Services({{serviceId}})
+
+### --- negative tests -------------------------------------------------
+
+### Missing mandatory currency-tagged amount still ok (imc has default 0)
+POST {{catalog}}/Services
+Content-Type: application/json
+
+{ "name": "Minimal service" }
+
+### Bad key -> 404
+GET {{catalog}}/Services(00000000-0000-0000-0000-000000000000)

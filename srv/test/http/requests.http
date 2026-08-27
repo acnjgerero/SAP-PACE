@@ -1,0 +1,43 @@
+### PACE – Project Requests HTTP tests (create request + technical features + service selection)
+# Run `cds watch` first. RequestFeatures / RequestServices are compositions of ProjectRequest,
+# so they are created/updated/deleted through the parent (deep payloads) or via navigation.
+#
+# Order: run "Pick a service" -> paste an ID into @svcId below -> run "Create a full draft request"
+# -> the remaining blocks resolve from that response.
+
+@host = http://localhost:4004
+@catalog = {{host}}/odata/v4/catalog
+
+### Pick a service to reference in the request (grab an ID from here)
+GET {{catalog}}/Services?$select=name,imc,currency_code&$top=5
+
+### Project Type dropdown list
+GET {{catalog}}/ProjectTypes
+
+### Market dropdown list
+GET {{catalog}}/Markets
+
+### List requests with children
+GET {{catalog}}/ProjectRequest?$expand=features,services($expand=service)&$orderby=createdAt desc
+
+### Create a full draft request (deep insert: details + features + selected services)
+# @name createRequest
+POST {{catalog}}/ProjectRequest
+Content-Type: application/json
+
+{
+  "name": "Retail Cloud Migration",
+  "type_code": "AMS",
+  "market_code": "APAC",
+  "clientName": "ACME Retail",
+  "projectPOC": "JDOE",
+  "solutionArchPOC": "ASMITH",
+  "status": "Draft",
+  "features": [
+    { "name": "Real-time data replication", "description": "S/4HANA to Cloud via events" },
+    { "name": "API Management Gateway",     "description": "Expose OData services securely" }
+  ],
+  "services": [
+    { "service_ID": "a3f1c2d4-0b5e-4a9c-8d21-1f6e7a0b9c11", "noOfmetrics": 100, "currency_code": "USD" }
+  ]
+}
