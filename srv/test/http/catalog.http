@@ -7,6 +7,7 @@
 
 # Captured from the "create service" response and reused below.
 @serviceId = a3f1c2d4-0b5e-4a9c-8d21-1f6e7a0b9c11
+@planId = 55555555-5555-4555-8555-555555555551
 
 ### Service document / metadata
 GET {{catalog}}/
@@ -18,60 +19,97 @@ GET {{catalog}}/$metadata
 GET {{catalog}}/Services?$top=20&$orderby=createdAt desc
 
 ### List services – catalog list-report shape (columns shown in the UI)
-GET {{catalog}}/Services?$select=name,plan,techFeature,costByMetrics,imc,currency_code,status&$orderby=name
+GET {{catalog}}/Services?$select=name,currency_code,status&$expand=plan($select=name,techFeature,costByMetrics,imc)&$orderby=name
 
 ### Filter – only Active services
 GET {{catalog}}/Services?$filter=status eq true
 
-### Filter – free-text search on name + tech features
-GET {{catalog}}/Services?$filter=contains(name,'AI') or contains(techFeature,'AI')
+### Filter – free-text search on name + plan tech features
+GET {{catalog}}/Services?$filter=contains(name,'AI') or plan/any(p: contains(p/techFeature,'AI'))&$expand=plan
 
 ### Count
 GET {{catalog}}/Services/$count
 
-### Create a service
+### Create a service with its plans (deep insert)
 # @name createService
 POST {{catalog}}/Services
 Content-Type: application/json
 
 {
   "name": "SAP HANA Cloud",
-  "plan": "Standard Ed",
-  "techFeature": "2 vCPU / 30 GB memory, 120 GB storage",
-  "costByMetrics": "Capacity Unit (CU)",
-  "imc": 1.75,
   "currency_code": "USD",
-  "status": true
+  "status": true,
+  "plan": [
+    {
+      "name": "Standard Ed",
+      "techFeature": "2 vCPU / 30 GB memory, 120 GB storage",
+      "costByMetrics": "Capacity Unit (CU)",
+      "imc": 1.75
+    }
+  ]
 }
 
-### Read the service just created
-GET {{catalog}}/Services({{serviceId}})
+### Read the service just created, with its plans
+GET {{catalog}}/Services({{serviceId}})?$expand=plan
 
-### Read a single field
-GET {{catalog}}/Services({{serviceId}})/imc
+### List the plans of a service
+GET {{catalog}}/Services({{serviceId}})/plan
 
-### Update (PATCH) – deactivate + reprice
+### Read a single plan field
+GET {{catalog}}/Services({{serviceId}})/plan({{planId}})/imc
+
+### Add a plan to an existing service
+POST {{catalog}}/Services({{serviceId}})/plan
+Content-Type: application/json
+
+{
+  "name": "Premium Ed",
+  "techFeature": "Dedicated capacity",
+  "costByMetrics": "Capacity Unit (CU)",
+  "imc": 3.50
+}
+
+### Update (PATCH) – reprice a plan
+PATCH {{catalog}}/Services({{serviceId}})/plan({{planId}})
+Content-Type: application/json
+
+{
+  "imc": 2.10
+}
+
+### Update (PATCH) – deactivate a service
 PATCH {{catalog}}/Services({{serviceId}})
 Content-Type: application/json
 
 {
-  "imc": 2.10,
   "status": false
 }
 
 ### Expand currency code list
 GET {{catalog}}/Services({{serviceId}})?$expand=currency
 
-### Delete
+### Delete (cascades to its plans)
 DELETE {{catalog}}/Services({{serviceId}})
 
 ### --- negative tests -------------------------------------------------
 
-### Missing mandatory currency-tagged amount still ok (imc has default 0)
+### Service without plans is ok (plans are optional)
 POST {{catalog}}/Services
 Content-Type: application/json
 
 { "name": "Minimal service" }
+
+### Plan without an imc is ok (imc has default 0)
+POST {{catalog}}/Services({{serviceId}})/plan
+Content-Type: application/json
+
+{ "name": "Free Tier", "techFeature": "Trial only" }
+
+### Plan missing mandatory techFeature -> 400
+POST {{catalog}}/Services({{serviceId}})/plan
+Content-Type: application/json
+
+{ "name": "Broken plan" }
 
 ### Bad key -> 404
 GET {{catalog}}/Services(00000000-0000-0000-0000-000000000000)

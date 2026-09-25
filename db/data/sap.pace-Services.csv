@@ -1,7 +1,6 @@
-ID;name;plan;techFeature;costByMetrics;imc;currency_code;status
-a3f1c2d4-0b5e-4a9c-8d21-1f6e7a0b9c11;AI Core;Extended Ed + Generative AI Hb;Combination of Standard plan w/ Gen AI Hub. Choice of model: anthropic--claude-4.5, gpt-5-mini, sap-abap-1;Capacity Unit (CU);1.23;USD;true
-b7e2d6a1-4c93-4f28-9a10-2d8f3b1e4c22;SAP AI Launchpad;Standard Ed;For Production only. 1 tenant;Tenant;688.00;USD;true
-c1d9f4b8-7a26-4e51-8b73-3e0a9c2d5f33;Cloud Foundry;Standard Ed;2GB Memory;GB;98.00;USD;true
-d5a8c3e2-9f14-4b67-8c02-4f1b0d3e6a44;SAP Build Code;Standard Ed;UI app only - 1. Standard: Compute - 2GB w/o cloud logging (No mobile user);Capacity Unit (CU);1.18;USD;true
-e9b4d7f6-2c85-4a93-8d41-5a2c1e4f7b55;SAP Build Process Automation;Standard Ed;Standard User (Business Users);Active User;2.01;USD;true
-f2c6e9a4-8d37-4b12-9e50-6b3d2f5a8c66;SAP Build Process Automation;Standard Ed;Advanced Users (Developer/Administrator Users);Active User;2.01;USD;true
+ID;name;currency_code;status
+a3f1c2d4-0b5e-4a9c-8d21-1f6e7a0b9c11;AI Core;USD;true
+b7e2d6a1-4c93-4f28-9a10-2d8f3b1e4c22;SAP AI Launchpad;USD;true
+c1d9f4b8-7a26-4e51-8b73-3e0a9c2d5f33;Cloud Foundry;USD;true
+d5a8c3e2-9f14-4b67-8c02-4f1b0d3e6a44;SAP Build Code;USD;true
+e9b4d7f6-2c85-4a93-8d41-5a2c1e4f7b55;SAP Build Process Automation;USD;true

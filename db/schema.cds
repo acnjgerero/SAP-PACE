@@ -11,13 +11,18 @@ entity Markets : CodeList {
 
 entity Services : cuid, managed {
     name          : String(111)      @mandatory @title: 'Service Name';
-    plan          : String(255)      @mandatory @title: 'Plan Coverage';
-    techFeature   : LargeString      @mandatory @title: 'Technical Features Inclusion';
-    costByMetrics : String(111)      @title: 'Cost by Metrics';
-    imc           : Decimal(15, 2)   @title: 'SAP Indicative Monthly Cost' 
-                                     @Measures.ISOCurrency: currency_code default 0;
+    plans          : composition of many Plans on plans.parent = $self;
     currency      : Currency;        // -> Association to sap.common.Currencies
     status        : Boolean          @title: 'Status' default true;   // true = Active
+}
+
+entity Plans : cuid, managed {
+    parent          : Association to Services;
+    name            : String(255)      @mandatory @title: 'Plan Coverage';
+    techFeature     : LargeString      @mandatory @title: 'Technical Features Inclusion';
+    costByMetrics   : String(111)      @title: 'Cost by Metrics';
+    imc             : Decimal(15, 2)   @title: 'SAP Indicative Monthly Cost' 
+                                    @Measures.ISOCurrency: parent.currency_code default 0;
 }
 
 entity ProjectRequests : cuid, managed {
@@ -41,9 +46,10 @@ entity RequestFeatures : cuid {
 entity RequestServices : cuid {
     parent         : Association to ProjectRequests;
     service        : Association to Services @mandatory @assert.target;
+    plan           : Association to Plans    @mandatory @assert.target @title: 'Plan';
     noOfmetrics    : Integer default 1 @title: 'No. of Metrics';
     currency       : Currency;
-    estMonthlyCost : Decimal(15, 2) = noOfmetrics * service.imc 
+    estMonthlyCost : Decimal(15, 2) = noOfmetrics * plan.imc 
                                 @Measures.ISOCurrency: currency_code
                                 @title: 'Estimated Monthly Cost';
 }
