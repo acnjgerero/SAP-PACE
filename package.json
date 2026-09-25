@@ -10,7 +10,8 @@
     "@cap-js/sqlite": "^2.4",
     "@sap/cds-dk": "^9",
     "rimraf": "^5.0.5",
-    "mbt": "^1.2.49"
+    "mbt": "^1.2.49",
+    "cds-plugin-ui5": "^0.17.0"
   },
   "scripts": {
     "start": "cds-serve",
@@ -18,7 +19,8 @@
     "deploy:cf": "mbt build && cf deploy mta_archives/SAP_PACE_1.0.0.mtar --retries=0",
     "undeploy": "cf undeploy SAP_PACE --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-service-catalog": "cds watch --open sap.pace.ui.service.catalog.servicecatalog/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
   "cds": {
@@ -39,5 +41,11 @@
         "auth": "xsuaa"
       }
     }
-  }
+  },
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/service-catalog"
+  ]
 }

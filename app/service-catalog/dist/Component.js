@@ -1,0 +1,2 @@
+sap.ui.define(["sap/fe/core/AppComponent"],function(e){"use strict";const t=e.extend("sap.pace.ui.service.catalog.servicecatalog.Component",{metadata:{manifest:"json"}});return t});
+//# sourceMappingURL=Component.js.map
