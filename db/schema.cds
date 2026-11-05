@@ -11,6 +11,7 @@ entity Markets : CodeList {
 
 entity Services : cuid, managed {
     name          : String(111)      @mandatory @title: 'Service Name';
+    description     : String(1000);
     plans          : composition of many Plans on plans.parent = $self;
     currency      : Currency;        // -> Association to sap.common.Currencies
     status        : Boolean          @title: 'Status' default true;   // true = Active
