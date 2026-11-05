@@ -1,6 +1,6 @@
-ID;name;currency_code;status
-a3f1c2d4-0b5e-4a9c-8d21-1f6e7a0b9c11;AI Core;USD;true
-b7e2d6a1-4c93-4f28-9a10-2d8f3b1e4c22;SAP AI Launchpad;USD;true
-c1d9f4b8-7a26-4e51-8b73-3e0a9c2d5f33;Cloud Foundry;USD;true
-d5a8c3e2-9f14-4b67-8c02-4f1b0d3e6a44;SAP Build Code;USD;true
-e9b4d7f6-2c85-4a93-8d41-5a2c1e4f7b55;SAP Build Process Automation;USD;true
+ID;name;description;currency_code;status
+a3f1c2d4-0b5e-4a9c-8d21-1f6e7a0b9c11;AI Core;Run and manage AI workloads on SAP BTP: train and deploy machine learning models, and use generative AI and large language models (LLMs) such as Claude and GPT through the generative AI hub for chatbots, text generation, summarisation and embeddings.;USD;true
+b7e2d6a1-4c93-4f28-9a10-2d8f3b1e4c22;SAP AI Launchpad;Web-based tool to administer AI scenarios across AI runtimes such as SAP AI Core: manage models, deployments and executions, monitor AI operations, and test and compare prompts for large language models in the prompt editor.;USD;true
+c1d9f4b8-7a26-4e51-8b73-3e0a9c2d5f33;Cloud Foundry;Cloud Foundry runtime to deploy, run and scale custom applications and microservices written in Node.js, Java or Python, including backend APIs and CAP services, with memory-based pricing.;USD;true
+d5a8c3e2-9f14-4b67-8c02-4f1b0d3e6a44;SAP Build Code;Pro-code development environment for building full-stack business applications with CAP, SAP Fiori and Java or JavaScript, with generative AI assistance (Joule) for code generation, data models and tests.;USD;true
+e9b4d7f6-2c85-4a93-8d41-5a2c1e4f7b55;SAP Build Process Automation;Low-code tool to automate business processes: approval workflows, forms, decision rules and robotic process automation (RPA) bots that automate repetitive tasks for business users.;USD;true
