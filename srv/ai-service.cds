@@ -2,10 +2,10 @@
 
 service AIService {
     function searchPlans(phrase: String) returns array of {
-        planID;
-        serviceName;
-        planName;
-        serviceDescription;
-        relevance: Double;
+        planID             : UUID;
+        serviceName        : String;
+        planName           : String;
+        serviceDescription : String;
+        relevance          : Double;
     }
 }
